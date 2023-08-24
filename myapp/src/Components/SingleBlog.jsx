@@ -151,9 +151,14 @@ export default function WithBackgroundImage() {
         </Box>
       </Box>
       <Box w="80%" m="auto" mt="30px">
-        <Text lineHeight={'50px'} fontSize="2xl" textAlign={'justify'}>
-          {blog.SingleBlog?.body}
-        </Text>
+        <Text
+          lineHeight={'50px'}
+          fontSize="2xl"
+          textAlign={'justify'}
+          dangerouslySetInnerHTML={{ __html: blog.SingleBlog?.body }}
+        />
+        {/* {} */}
+        {/* </Text> */}
         <Text
           mt="40px"
           mb="40px"
