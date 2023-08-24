@@ -19,6 +19,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlogs } from '../Redux/actions/blogs.actions';
 import { Link } from 'react-router-dom';
+import Info from './Alert';
+import { AiFillDelete } from 'react-icons/ai';
 const BlogTags = (props) => {
   const { marginTop = 0, tags } = props;
 
@@ -61,28 +63,34 @@ export const ArticleList = () => {
     'radial(orange.300 1px, transparent 1px)'
   );
 
-  console.log(blog);
   useEffect(() => {
     dispatch(getBlogs());
   }, []);
+  if (blog.loading) {
+    return <Text fontSize={'2xl'}>...Loading</Text>;
+  }
   return (
     <>
-      <Box width={'80%'} m="auto" mt="5%">
-        <Heading as="h1">Stories And Blogs</Heading>
-        <Button
-          as={'a'}
-          display={{ base: 'none', md: 'inline-flex' }}
-          fontSize={'sm'}
-          fontWeight={600}
-          color={'white'}
-          bg={'pink.400'}
-          _hover={{
-            bg: 'pink.300',
-          }}
-        >
-          <Link to="/my-blogs">My Blogs</Link>
-        </Button>{' '}
-      </Box>
+      {blog.blog?.length > 0 ? (
+        <Box width={'80%'} m="auto" mt="5%">
+          <Heading as="h1">Stories And Blogs</Heading>
+          <Button
+            as={'a'}
+            display={{ base: 'none', md: 'inline-flex' }}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'pink.400'}
+            _hover={{
+              bg: 'pink.300',
+            }}
+          >
+            <Link to="/my-blogs">My Blogs</Link>
+          </Button>{' '}
+        </Box>
+      ) : (
+        <Info content="You have No vlogs" />
+      )}
 
       {blog.blog?.map((item, index) => {
         return (

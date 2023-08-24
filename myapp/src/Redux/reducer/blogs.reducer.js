@@ -46,8 +46,8 @@ export const blogReducer = (state = BlogState, { type, payload }) => {
         ...state,
         loading: false,
         error: false,
-        blog: payload,
-        MyBlogs: filter,
+        blog: payload.reverse(),
+        MyBlogs: filter.reverse(),
         userDetails: {
           username: username,
         },

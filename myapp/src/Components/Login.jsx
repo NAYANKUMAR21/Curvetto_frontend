@@ -13,9 +13,11 @@ import {
   FormControl,
   FormHelperText,
   InputRightElement,
+  Text,
+  useToast,
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Signup from './Signup';
 import { LoginAction } from '../Redux/actions/auth.actions';
@@ -23,6 +25,7 @@ const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Login = () => {
+  const toast = useToast();
   const dispatch = useDispatch();
   const Auth = useSelector((state) => state.Auth);
   const [showPassword, setShowPassword] = useState(false);
@@ -36,10 +39,48 @@ const Login = () => {
   };
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(cred);
+    const { name, username, password, birthdate } = cred;
+    if (name == '' || username == '' || password == '' || birthdate == '') {
+      return toast({
+        position: 'bottom-left',
+        render: () => (
+          <Box color="white" p={3} bg="blue.500">
+            Do not leave any feild empty
+          </Box>
+        ),
+      });
+    }
+    if (password.length <= 4) {
+      return toast({
+        position: 'bottom-left',
+        render: () => (
+          <Box color="white" p={3} bg="blue.500">
+            Password length should be more than 5 charcaters
+          </Box>
+        ),
+      });
+    }
+
     return dispatch(LoginAction(cred));
   };
   const handleShowClick = () => setShowPassword(!showPassword);
+  if (Auth.isAuth) {
+    return <Navigate to="/" />;
+  }
+  if (Auth.loading) {
+    return <Text fontSize="2xl">..Loading</Text>;
+  }
+  if (Auth.error) {
+    toast({
+      position: 'bottom-left',
+      render: () => (
+        <Box color="white" p={3} bg="blue.500">
+          {Auth.errorMessage}
+        </Box>
+      ),
+    });
+    return <Navigate to="/signup" />;
+  }
 
   return (
     <>

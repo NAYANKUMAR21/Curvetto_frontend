@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlogs } from '../Redux/actions/blogs.actions';
 import { Link } from 'react-router-dom';
+import Info from './Alert';
 const BlogTags = (props) => {
   const { marginTop = 0, tags } = props;
 
@@ -61,16 +62,19 @@ export const MyArticleList = () => {
     'radial(orange.300 1px, transparent 1px)'
   );
 
-  console.log(blog);
+  
   useEffect(() => {
     dispatch(getBlogs());
   }, []);
   return (
     <>
-      <Box width={'80%'} m="auto" mt="5%">
-        <Heading as="h1">My Blogs</Heading>
-      </Box>
-
+      {blog.MyBlogs?.length > 0 ? (
+        <Box width={'80%'} m="auto" mt="5%">
+          <Heading as="h1">My Blogs</Heading>
+        </Box>
+      ) : (
+        <Info content="You have No Blogs" />
+      )}
       {blog.MyBlogs?.map((item, index) => {
         return (
           <Link to={`/single/${item._id}`} key={index}>

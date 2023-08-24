@@ -19,10 +19,14 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { AiFillLike, AiFillDislike } from 'react-icons/ai';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { AiFillLike, AiFillDislike, AiFillDelete } from 'react-icons/ai';
+import { BiEditAlt } from 'react-icons/bi';
 import { FaCommentAlt } from 'react-icons/fa';
 import {
+  addDisLikes,
+  addLikes,
+  deleteBlog,
   getBlogs,
   getSingleBlog,
   postComment,
@@ -32,21 +36,29 @@ export default function WithBackgroundImage() {
   const blog = useSelector((state) => state.blog);
   const [comment, setComment] = useState('');
   const { id } = useParams();
-  console.log(id);
-  console.log(blog);
-  const handleClick = (e) => {
+  const nav = useNavigate();
+
+  const handleClick = async (e) => {
     e.preventDefault();
     let obj = {
       blogId: blog.SingleBlog?._id,
       comment,
     };
-    return dispatch(postComment(obj)).then((res) =>
+    setComment('');
+    return await dispatch(postComment(obj)).then((res) =>
       dispatch(getSingleBlog(id))
     );
-    console.log('comment', comment);
   };
-  const handleLike = () => {};
-  const handleDislike = () => {};
+  const handleDelete = () => {
+    dispatch(deleteBlog(blog.SingleBlog));
+    return nav('/');
+  };
+  const handleLike = () => {
+    return dispatch(addLikes(blog.SingleBlog._id)).then((res) => {
+      dispatch(getSingleBlog(id));
+    });
+  };
+
   useEffect(() => {
     dispatch(getSingleBlog(id));
   }, [id]);
@@ -92,15 +104,29 @@ export default function WithBackgroundImage() {
         </VStack>
       </Flex>
       <Box w="80%" m="auto" mt="50px">
+        {blog.SingleBlog?.userId?.username ===
+          localStorage.getItem('username') && (
+          <Box>
+            <Box>
+              <Button
+                broder="1px solid black"
+                p={'5px'}
+                mb="10px"
+                onClick={handleDelete}
+              >
+                <AiFillDelete />
+              </Button>
+            </Box>
+            <Box>
+              <Button mb="10px" onClick={() => nav('/edit-view-blogs')}>
+                <BiEditAlt />
+              </Button>
+            </Box>
+          </Box>
+        )}{' '}
         <Flex justifyContent={'space-between'} width={'15%'}>
-          <Button gap="10px">
-            {blog.SingleBlog?.likes}
-            <AiFillLike />
-          </Button>
-          <Button gap="10px">
-            {blog.SingleBlog?.dislikes}
-
-            <AiFillDislike color="gray.700" />
+          <Button gap="10px" onClick={handleLike}>
+            <AiFillLike />| {blog.SingleBlog?.likes?.length}
           </Button>
         </Flex>
         <Box mt="30px">
@@ -142,9 +168,8 @@ export default function WithBackgroundImage() {
           {blog.SingleBlog?.comments?.length > 0 && (
             <Box ml="30px">
               {blog.SingleBlog?.comments?.map((item, index) => {
-                console.log(item);
                 return (
-                  <Box mt="10px">
+                  <Box mt="10px" key={index}>
                     <Flex gap="10px">
                       <Box>
                         {' '}
@@ -156,7 +181,7 @@ export default function WithBackgroundImage() {
                           borderRadius="full"
                           boxSize="40px"
                           src="https://100k-faces.glitch.me/random-image"
-                          alt={`Avatar of ${item.userId.username}`}
+                          alt={`Avatar of ${item?.userId?.username}`}
                         />
                       </Box>
                       <Box>

@@ -21,6 +21,7 @@ import {
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { PostBlog } from '../Redux/actions/blogs.actions';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const avatars = [
   {
@@ -69,7 +70,6 @@ const Blur = (props) => {
 const handleChangeCLOUDINERY = async (files) => {
   //   const { files } = e.target;
   const copy = [...files];
-  console.log(copy);
 
   let formData = new FormData();
   formData.append('file', copy[0]);
@@ -80,10 +80,10 @@ const handleChangeCLOUDINERY = async (files) => {
   );
   // .then((res) => res.data.url);
 
-  console.log(x.data.secure_url);
   return x.data.secure_url;
 };
 export default function WriteBlog() {
+  const nav = useNavigate();
   const [Imageloading, setImageLoading] = useState(false);
   const dispatch = useDispatch();
   const toast = useToast();
@@ -96,14 +96,14 @@ export default function WriteBlog() {
     const { name, value } = e.target;
     if (name == 'file') {
       SetBlogItem({ ...blogItem, image: e.target.files });
-      console.log(e.target.files);
+
       return;
     }
     SetBlogItem({ ...blogItem, [name]: value });
   };
   const handleClick = async () => {
     setImageLoading(true);
-    console.log(blogItem);
+
     const { title, body } = blogItem;
     if (title == '' || body == '') {
       return toast({
@@ -118,7 +118,9 @@ export default function WriteBlog() {
     setImageLoading(false);
 
     dispatch(PostBlog({ ...blogItem, image: x }));
-    return;
+
+    // <Navigate to="/" />;
+    return nav('/');
   };
 
   return (

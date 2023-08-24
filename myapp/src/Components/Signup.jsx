@@ -13,18 +13,22 @@ import {
   FormControl,
   FormHelperText,
   InputRightElement,
+  Text,
+  useToast,
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock, FaBirthdayCake } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { NavLink, Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { SignupAction } from '../Redux/actions/auth.actions';
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Signup = () => {
+  const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
   const dispatch = useDispatch();
+  const Auth = useSelector((state) => state.Auth);
   const [cred, SetCred] = useState({
     name: '',
     username: '',
@@ -37,10 +41,40 @@ const Signup = () => {
   };
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(cred);
+    const { name, username, password, birthdate } = cred;
+    if (!name || !username || !password || !birthdate) {
+      return toast({
+        position: 'bottom-left',
+        render: () => (
+          <Box color="white" p={3} bg="blue.500">
+            Do not leave any feild empty
+          </Box>
+        ),
+      });
+    }
+    
     return dispatch(SignupAction(cred));
   };
-
+  if (Auth.isAuth) {
+    return <Navigate to="/" />;
+  }
+  if (Auth.loading) {
+    return <Text fontSize="2xl">..Loading</Text>;
+  }
+  if (Auth.error && !Auth.errorMessage) {
+    toast({
+      position: 'bottom-left',
+      isClosable: true,
+      duration: 5000,
+      render: () => {
+        return (
+          <Box color="white" p={3} bg="blue.500">
+            Something Went Wrong Please try once again
+          </Box>
+        );
+      },
+    });
+  }
   return (
     <Flex
       flexDirection="column"

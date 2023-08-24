@@ -29,7 +29,7 @@ export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
   const dispatch = useDispatch();
   const AuthRed = useSelector((state) => state.Auth);
-  console.log(AuthRed);
+
   return (
     <Box>
       <Flex

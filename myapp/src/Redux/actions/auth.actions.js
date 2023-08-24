@@ -8,19 +8,16 @@ export const SignupAction = (data) => async (dispatch, state) => {
     const signUp = await axios.post(`${URL_BACK}/user/signup`, data);
     dispatch({ type: AUTH_SUCCESSFULL, payload: signUp.data });
   } catch (er) {
-    console.log(er.message);
-    dispatch({ type: AUTH_ERROR });
+    return dispatch({ type: AUTH_ERROR });
   }
 };
 export const LoginAction = (data) => async (dispatch, state) => {
   try {
-    console.log(data);
     localStorage.setItem('username', data.username);
     dispatch({ type: AUTH_LOADING });
     const signUp = await axios.post(`${URL_BACK}/user/login`, data);
     dispatch({ type: AUTH_SUCCESSFULL, payload: signUp.data });
   } catch (er) {
-    console.log(er.message);
-    dispatch({ type: AUTH_ERROR });
+    return dispatch({ type: AUTH_ERROR, payload: er.response.data.message });
   }
 };
