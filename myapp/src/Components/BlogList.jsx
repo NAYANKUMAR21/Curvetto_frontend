@@ -13,6 +13,7 @@ import {
   Container,
   VStack,
   Button,
+  Spinner,
 } from '@chakra-ui/react';
 import { Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -67,7 +68,16 @@ export const ArticleList = () => {
     dispatch(getBlogs());
   }, []);
   if (blog.loading) {
-    return <Text fontSize={'2xl'}>...Loading</Text>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Spinner size="xl" />
+      </Box>
+    );
   }
   return (
     <>

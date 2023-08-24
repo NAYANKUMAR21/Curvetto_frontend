@@ -15,6 +15,7 @@ import {
   InputRightElement,
   Text,
   useToast,
+  Spinner,
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { NavLink, Navigate } from 'react-router-dom';
@@ -68,7 +69,16 @@ const Login = () => {
     return <Navigate to="/" />;
   }
   if (Auth.loading) {
-    return <Text fontSize="2xl">..Loading</Text>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Spinner size="xl" />
+      </Box>
+    );
   }
   if (Auth.error) {
     toast({
