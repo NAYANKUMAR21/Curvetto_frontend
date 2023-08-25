@@ -18,15 +18,43 @@ const Allroutes = () => {
       <Route
         path="/"
         element={
-          <PrivateROute>
+          <>
             <ArticleList />
+          </>
+        }
+      ></Route>
+      <Route
+        path="/edit-view-blogs"
+        element={
+          <PrivateROute>
+            <ViewBlog />
           </PrivateROute>
         }
       ></Route>
-      <Route path="/edit-view-blogs" element={<ViewBlog />}></Route>
-      <Route path="/my-blogs" element={<MyArticleList />}></Route>
-      <Route path="/write-blog" element={<WriteBlog />}></Route>
-      <Route path="/single/:id" element={<WithBackgroundImage />}></Route>
+      <Route
+        path="/my-blogs"
+        element={
+          <PrivateROute>
+            <MyArticleList />
+          </PrivateROute>
+        }
+      ></Route>
+      <Route
+        path="/write-blog"
+        element={
+          <PrivateROute>
+            <WriteBlog />
+          </PrivateROute>
+        }
+      ></Route>
+      <Route
+        path="/single/:id"
+        element={
+          <PrivateROute>
+            <WithBackgroundImage />
+          </PrivateROute>
+        }
+      ></Route>
     </Routes>
   );
 };

@@ -25,6 +25,8 @@ export const blogReducer = (state = BlogState, { type, payload }) => {
     case BLOG_GET_SINGLE_SUCCESS: {
       return {
         ...state,
+        loading: false,
+        error: false,
         SingleBlog: payload,
       };
     }

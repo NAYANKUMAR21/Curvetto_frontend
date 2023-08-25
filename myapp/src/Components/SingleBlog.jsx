@@ -16,6 +16,7 @@ import {
   Avatar,
   Divider,
   Image,
+  Spinner,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,7 +38,8 @@ export default function WithBackgroundImage() {
   const [comment, setComment] = useState('');
   const { id } = useParams();
   const nav = useNavigate();
-
+  const px = useBreakpointValue({ base: 4, md: 8 });
+  const fontSizeElement = useBreakpointValue({ base: '3xl', md: '4xl' });
   const handleClick = async (e) => {
     e.preventDefault();
     let obj = {
@@ -62,6 +64,18 @@ export default function WithBackgroundImage() {
   useEffect(() => {
     dispatch(getSingleBlog(id));
   }, [id]);
+  if (blog.loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
   return (
     <>
       <Flex
@@ -78,7 +92,7 @@ export default function WithBackgroundImage() {
         <VStack
           w={'full'}
           justify={'center'}
-          px={useBreakpointValue({ base: 4, md: 8 })}
+          px={px}
           bgGradient={'linear(to-r, blackAlpha.600, transparent)'}
         >
           <Stack maxW={'2xl'} align={'flex-start'} spacing={6}>
@@ -86,7 +100,7 @@ export default function WithBackgroundImage() {
               color={'white'}
               fontWeight={700}
               lineHeight={1.2}
-              fontSize={useBreakpointValue({ base: '3xl', md: '4xl' })}
+              fontSize={fontSizeElement}
             >
               {blog.SingleBlog?.title}
             </Text>
@@ -165,7 +179,7 @@ export default function WithBackgroundImage() {
           color={'black'}
           fontWeight={700}
           lineHeight={1.2}
-          fontSize={useBreakpointValue({ base: '3xl', md: '4xl' })}
+          fontSize={fontSizeElement}
         >
           Comments
         </Text>
