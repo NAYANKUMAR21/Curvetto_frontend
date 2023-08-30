@@ -62,7 +62,6 @@ export const MyArticleList = () => {
     'radial(orange.300 1px, transparent 1px)'
   );
 
-  
   useEffect(() => {
     dispatch(getBlogs());
   }, []);
@@ -150,17 +149,20 @@ export const MyArticleList = () => {
                       color={y}
                       fontSize="lg"
                       noOfLines={5}
-                    >
-                      {/* Lorem Ipsum is simply dummy text of the printing and
+                      dangerouslySetInnerHTML={{ __html: item.body }}
+                    />
+                    {/* Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry&apos;s
                     standard dummy text ever since the 1500s, when an unknown
                     printer took a galley of type and scrambled it to make a type
                     specimen book. */}
-                      {item.body}
-                    </Text>
+                    {/* {item.body}
+                    </Text> */}
                   </Box>
+
                   <BlogAuthor
-                    name="John Doe"
+                    // name="John Doe"
+                    name={item?.userId?.username}
                     // date={new Date('2021-04-06T19:01:27Z')}
                     date={new Date(item.createdAt)}
                   />

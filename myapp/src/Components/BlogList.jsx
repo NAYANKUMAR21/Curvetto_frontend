@@ -178,6 +178,7 @@ export const ArticleList = () => {
                       fontSize="lg"
                       noOfLines={5}
                       dangerouslySetInnerHTML={{ __html: item.body }}
+                      // dangerouslySetInnerHTML={{ __html: item.body }}
                     />
                     {/* Lorem Ipsum is simply dummy text of the printing and
                   typesetting industry. Lorem Ipsum has been the industry&apos;s
@@ -187,6 +188,7 @@ export const ArticleList = () => {
                     {/* // {item.body} */}
                     {/* //   </Text> */}
                   </Box>
+
                   <BlogAuthor
                     name={item.userId.username}
                     // date={new Date('2021-04-06T19:01:27Z')}
